@@ -1,0 +1,82 @@
+[2026-07-01T19:36:22.365Z] Admin logged in successfully.
+[2026-07-01T19:38:18.376Z] New student registered: Lional Messi (EDU-2026-0001)
+[2026-07-01T19:38:20.928Z] New student registered: Lional Messi (EDU-2026-0002)
+[2026-07-01T19:38:25.382Z] New student registered: Lional Messi (EDU-2026-0003)
+[2026-07-01T19:39:11.594Z] New student registered: Lional Messi (EDU-2026-0004)
+[2026-07-01T19:39:13.154Z] New student registered: Lional Messi (EDU-2026-0005)
+[2026-07-01T19:40:17.028Z] New student registered: zjcxks (EDU-2026-0006)
+[2026-07-01T19:44:05.854Z] New student registered: Lional Messi (EDU-2026-0007)
+[2026-07-02T15:52:17.830Z] Admin logged in successfully.
+[2026-07-02T15:52:46.927Z] Admin logged in successfully.
+[2026-07-02T15:54:07.945Z] New student registered: Lional Messi (EDU-2026-0008)
+[2026-07-02T16:11:56.520Z] New student registered: lional Messi (EDU-2026-0009)
+[2026-07-02T16:12:22.243Z] New student registered: lional Messi (EDU-2026-0010)
+[2026-07-02T16:29:08.522Z] New student registered: Lional Messi (EDU-2026-0011)
+[2026-07-02T16:29:40.768Z] New student registered: Lional Messi (EDU-2026-0012)
+[2026-07-02T16:29:48.997Z] New student registered: Lional Messi (EDU-2026-0013)
+[2026-07-02T16:31:33.658Z] New student registered: Lional Messi (EDU-2026-0014)
+[2026-07-02T16:32:05.198Z] New student registered: Lional Messi (EDU-2026-0015)
+[2026-07-02T16:38:07.056Z] New student registered: Lional Messi (EDU-2026-0016)
+[2026-07-02T16:40:08.630Z] New student registered: Lional Messi (EDU-2026-8628)
+[2026-07-02T16:52:55.131Z] New student registered: Lional Messi (EDU-2026-0017)
+[2026-07-02T16:59:16.556Z] New student registered: John Doe (EDU-2026-0018)
+[2026-07-02T17:00:19.945Z] New student registered: John Doe (EDU-2026-0019)
+[2026-07-02T17:03:11.905Z] New student registered: John Doe (EDU-2026-0020)
+[2026-07-02T18:06:00.572Z] New student registered: Jane Smith (EDU-2026-0021)
+[2026-07-02T18:16:16.106Z] New student registered: Lional Messi (EDU-2026-0022)
+[2026-07-02T18:17:43.146Z] Payment received: 15000 for student EDU-2026-0022 (Receipt: REC-00001)
+[2026-07-02T18:22:00.333Z] Student status changed: EDU-2026-0021 is now Completed
+[2026-07-02T18:22:00.337Z] Payment received: 1500 for student EDU-2026-0021 (Receipt: REC-00002)
+[2026-07-02T18:38:09.178Z] Admin logged in successfully.
+[2026-07-02T18:48:49.031Z] New student registered: Christiano Ronaldo (EDU-2026-0023)
+[2026-07-02T18:49:30.928Z] Payment received: 10000 for student EDU-2026-0022 (Receipt: REC-00003)
+[2026-07-03T06:34:15.839Z] New student registered: Vipin (EDU-2026-0024)
+[2026-07-03T06:34:51.361Z] Payment received: 10000 for student EDU-2026-0024 (Receipt: REC-00004)
+[2026-07-03T09:58:09.292Z] Admin logged in successfully.
+[2026-07-03T12:00:58.629Z] Admin logged in successfully.
+[2026-07-03T12:20:23.729Z] Admin logged in successfully.
+[2026-07-03T19:00:41.087Z] Payment received: 10000 for student EDU-2026-0024 (Receipt: REC-00005)
+[2026-07-05T16:42:07.342Z] Student status changed: EDU-2026-0022 is now Completed
+[2026-07-05T16:42:07.355Z] Payment received: 5000 for student EDU-2026-0022 (Receipt: REC-00006)
+[2026-07-05T16:58:11.373Z] New student registered: Virat Kohli (EDU-2026-0025)
+[2026-07-05T16:59:36.437Z] New student registered: Neymer Jr (TEC-2026-0026)
+[2026-07-05T17:00:21.047Z] Payment received: 25000 for student TEC-2026-0026 (Receipt: REC-00007)
+[2026-07-06T11:18:16.928Z] Student status changed: EDU-2026-0024 is now Completed
+[2026-07-06T11:18:16.938Z] Payment received: 10000 for student EDU-2026-0024 (Receipt: REC-00008)
+[2026-07-06T12:08:14.290Z] New student registered: Sachin (TEC-2026-0027)
+[2026-07-06T12:09:43.033Z] New student registered: Sachin (TEC-2026-0028)
+[2026-07-06T12:19:08.355Z] Admin logged in successfully.
+[2026-07-06T15:37:36.251Z] Payment received: 25000 for student EDU-2026-0022 (Receipt: REC-00017)
+[2026-07-06T15:38:35.494Z] Payment received: 15000 for student EDU-2026-0023 (Receipt: REC-00018)
+[2026-07-06T15:39:40.366Z] Student status changed: TEC-2026-0028 is now Completed
+[2026-07-06T15:39:40.372Z] Payment received: 35000 for student TEC-2026-0028 (Receipt: REC-00019)
+[2026-07-06T15:48:27.873Z] Payment received: 10000 for student EDU-2026-0024 (Receipt: REC-00020)
+[2026-07-06T16:10:19.132Z] Admin logged in successfully.
+[2026-07-09T19:46:56.237Z] Admin logged in successfully.
+[2026-07-09T19:48:14.508Z] Payment received: 5000 for student TEC-2026-0028 (Receipt: REC-00021)
+[2026-07-11T07:01:47.841Z] Admin logged in successfully.
+[2026-07-11T07:04:18.024Z] Admin logged in successfully.
+[2026-07-18T18:52:55.945Z] Student status changed: EDU-2026-0021 is now Active - Payment Completed
+[2026-07-18T18:52:56.000Z] Student status changed: EDU-2026-0022 is now Active - Payment Completed
+[2026-07-18T18:52:56.006Z] Student status changed: EDU-2026-0023 is now Active - Payment Pending
+[2026-07-18T18:52:56.010Z] Student status changed: EDU-2026-0024 is now Active - Payment Completed
+[2026-07-18T18:52:56.014Z] Student status changed: EDU-2026-0025 is now Active - Payment Pending
+[2026-07-18T18:52:56.018Z] Student status changed: TEC-2026-0026 is now Active - Payment Pending
+[2026-07-18T18:52:56.022Z] Student status changed: TEC-2026-0028 is now Active - Payment Completed
+[2026-07-18T19:00:34.594Z] Admin logged in successfully.
+[2026-07-18T19:12:08.833Z] Admin logged in successfully.
+[2026-07-18T19:12:54.110Z] Payment received: 10000 for student EDU-2026-0025 (Receipt: REC-00022)
+[2026-07-18T19:15:35.764Z] New student registered: Watson (TEC-2026-0029)
+[2026-07-18T19:16:29.539Z] Payment received: 4000 for student TEC-2026-0029 (Receipt: REC-00023)
+[2026-07-18T19:17:01.544Z] Student status changed: TEC-2026-0026 is now Active - Payment Completed
+[2026-07-18T19:17:01.550Z] Payment received: 10000 for student TEC-2026-0026 (Receipt: REC-00024)
+[2026-07-18T19:18:06.887Z] Student status changed: EDU-2026-0023 is now Active - Payment Completed
+[2026-07-18T19:18:06.898Z] Payment received: 25000 for student EDU-2026-0023 (Receipt: REC-00025)
+[2026-07-18T19:19:51.440Z] Student status changed: TEC-2026-0026 is now Passout
+[2026-07-18T19:25:34.273Z] Student status changed: TEC-2026-0029 is now Passout
+[2026-07-18T19:26:55.306Z] Student status changed: TEC-2026-0028 is now Active - Payment Completed
+[2026-07-18T19:27:13.685Z] Student status changed: TEC-2026-0028 is now Passout
+[2026-07-18T19:27:40.061Z] Payment received: 26000 for student TEC-2026-0029 (Receipt: REC-00026)
+[2026-07-18T19:40:42.857Z] Admin logged in successfully.
+[2026-07-18T19:45:21.584Z] Admin logged in successfully.
+[2026-07-18T19:45:43.692Z] Admin logged in successfully.
