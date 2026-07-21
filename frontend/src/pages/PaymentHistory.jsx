@@ -84,7 +84,7 @@ export default function PaymentHistory() {
       const res = await api.get("/payments");
       setPayments(res.data);
     } catch (err) {
-      console.error(err);
+      // Ignored
     }
   };
 

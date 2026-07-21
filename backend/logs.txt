@@ -93,3 +93,8 @@
 [2026-07-21T18:36:19.561Z] Student status changed: TEC-2026-0030 is now Active - Payment Pending
 [2026-07-21T18:38:37.072Z] New student registered: JohnSon (TEC-2026-0032)
 [2026-07-21T18:42:43.096Z] Student status changed: TEC-2026-0031 is now Passout
+[2026-07-21T19:15:17.578Z] Payment received: 10000 for student TEC-2026-0032 (Receipt: REC-00030)
+[2026-07-21T19:23:53.318Z] Payment received: 10000 for student TEC-2026-0032 (Receipt: REC-00031)
+[2026-07-21T19:53:08.402Z] Student status changed: EDU-2026-0025 is now Active - Payment Completed
+[2026-07-21T19:55:25.912Z] New student registered: Kannan (TEC-2026-0033)
+[2026-07-21T19:55:47.346Z] Payment received: 500 for student TEC-2026-0033 (Receipt: REC-00032)

@@ -32,7 +32,6 @@ export default function AddPayment() {
             setIsSearching(false);
           })
           .catch(err => {
-            console.error(err);
             setIsSearching(false);
           });
       } else {
@@ -62,7 +61,6 @@ export default function AddPayment() {
       // Redirect to history/print page after successful payment
       navigate('/payments/history');
     } catch (err) {
-      console.error(err);
       alert('Failed to record payment');
     }
   };

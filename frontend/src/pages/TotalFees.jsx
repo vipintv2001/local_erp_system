@@ -19,7 +19,7 @@ export default function TotalFees() {
       const sorted = res.data.sort((a, b) => b.pendingAmount - a.pendingAmount);
       setStudents(sorted);
     } catch (err) {
-      console.error(err);
+      // Ignored
     }
   };
 

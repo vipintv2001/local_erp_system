@@ -48,7 +48,7 @@ export default function StudentProfile() {
       const res = await api.get(`/students/${id}`);
       setData(res.data);
     } catch (err) {
-      console.error(err);
+      // Ignored
     }
   };
 
@@ -57,7 +57,7 @@ export default function StudentProfile() {
       const res = await api.get("/courses");
       setCoursesList(res.data);
     } catch (err) {
-      console.error(err);
+      // Ignored
     }
   };
 
@@ -139,7 +139,6 @@ export default function StudentProfile() {
       setShowEditModal(false);
       fetchProfile();
     } catch (err) {
-      console.error(err);
       alert(err.response?.data?.message || "Failed to update student");
     }
   };
@@ -150,7 +149,7 @@ export default function StudentProfile() {
         await api.delete(`/students/${id}`);
         navigate("/students");
       } catch (err) {
-        console.error(err);
+        // Ignored
       }
     }
   };

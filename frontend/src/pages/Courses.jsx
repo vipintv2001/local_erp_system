@@ -53,7 +53,7 @@ export default function Courses() {
       const res = await api.get('/courses');
       setCourses(res.data);
     } catch (err) {
-      console.error(err);
+      // Ignored
     }
   };
 
@@ -73,7 +73,6 @@ export default function Courses() {
       });
       fetchCourses();
     } catch (err) {
-      console.error(err);
       setError(err.response?.data?.message || 'Failed to add course. Please try again.');
     }
   };
@@ -101,7 +100,6 @@ export default function Courses() {
       setEditingCourse(null);
       fetchCourses();
     } catch (err) {
-      console.error(err);
       setEditError(err.response?.data?.message || 'Failed to update course.');
     }
   };
@@ -115,7 +113,6 @@ export default function Courses() {
         }
         fetchCourses();
       } catch (err) {
-        console.error(err);
         alert(err.response?.data?.message || 'Failed to delete course');
       }
     }
@@ -136,7 +133,7 @@ export default function Courses() {
       );
       setEnrolledStudents(matchingStudents);
     } catch (err) {
-      console.error(err);
+      // Ignored
     }
   };
 

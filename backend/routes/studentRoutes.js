@@ -25,50 +25,87 @@ const parseCourses = (courses) => {
 // 1. STATIC & SPECIFIC GET ROUTES FIRST
 // ==========================================
 
-// Get Dashboard Metrics (Moved up so it doesn't conflict with /:id)
+// Get Dashboard Metrics
 router.get("/metrics/dashboard", async (req, res) => {
   try {
-    const activeAndPassoutQuery = {
-      status: { $in: ["Active - Payment Completed", "Active - Payment Pending", "Active", "Passout"] }
-    };
-
-    const totalStudents = await Student.countDocuments(activeAndPassoutQuery);
-    
-    const activeStudents = await Student.countDocuments({
-      status: { $in: ["Active - Payment Completed", "Active - Payment Pending", "Active"] }
-    });
-
-    const feesPending = await Student.countDocuments({
-      ...activeAndPassoutQuery,
-      pendingAmount: { $gt: 0 }
-    });
-
-    const fullyPaid = await Student.countDocuments({
-      ...activeAndPassoutQuery,
-      pendingAmount: { $lte: 0 }
-    });
-
     const students = await Student.find();
+    const payments = await Payment.find().sort({ datePaid: -1 });
+
+    const studentPaymentsMap = {};
+    let allTimeFeesCollected = 0;
+
+    const now = new Date();
+    const currentYear = now.getFullYear();
+    const currentMonth = now.getMonth();
+
+    let feesCollectedThisMonth = 0;
+
+    payments.forEach((p) => {
+      const amt = Number(p.amountPaid) || 0;
+      allTimeFeesCollected += amt;
+
+      const sId = p.student ? p.student.toString() : null;
+      if (sId) {
+        studentPaymentsMap[sId] = (studentPaymentsMap[sId] || 0) + amt;
+      }
+
+      if (p.datePaid) {
+        const d = new Date(p.datePaid);
+        if (d.getFullYear() === currentYear && d.getMonth() === currentMonth) {
+          feesCollectedThisMonth += amt;
+        }
+      }
+    });
+
+    let totalStudents = students.length;
+    let activeStudents = 0;
+    let feesPendingCount = 0;
     let totalExpected = 0;
     let totalPaid = 0;
     let totalPending = 0;
 
-    students.forEach((s) => {
-      totalExpected += s.totalFee;
-      totalPaid += s.paidAmount || 0;
-      totalPending += s.pendingAmount || 0;
-    });
+    for (const s of students) {
+      const sId = s._id.toString();
+      const paidFromPayments = studentPaymentsMap[sId] || 0;
+      const paidFromDoc = Number(s.paidAmount) || 0;
+      const actualPaid = Math.max(paidFromPayments, paidFromDoc);
+      const totalFee = Number(s.totalFee) || 0;
+      const pending = Math.max(0, totalFee - actualPaid);
 
-    const collectionRate =
-      totalExpected > 0 ? ((totalPaid / totalExpected) * 100).toFixed(2) : 0;
+      totalExpected += totalFee;
+      totalPaid += actualPaid;
+      totalPending += pending;
+
+      if (pending > 0) {
+        feesPendingCount++;
+      }
+
+      const isActive = s.status && (s.status === "Active" || s.status.startsWith("Active"));
+      if (isActive) {
+        activeStudents++;
+      }
+
+      if (s.paidAmount !== actualPaid || s.pendingAmount !== pending) {
+        s.paidAmount = actualPaid;
+        s.pendingAmount = pending;
+        if (isActive) {
+          s.status = pending <= 0 ? "Active - Payment Completed" : "Active - Payment Pending";
+        }
+        await s.save({ validateBeforeSave: false });
+      }
+    }
+
+    const collectionRate = totalExpected > 0 ? ((totalPaid / totalExpected) * 100).toFixed(2) : 0;
 
     res.json({
       totalStudents,
       activeStudents,
-      feesPending,
-      fullyPaid,
+      feesPendingCount,
       totalPending,
-      collectionRate,
+      feesCollectedThisMonth,
+      allTimeFeesCollected,
+      collectionRate: Number(collectionRate),
+      payments,
     });
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -98,7 +135,25 @@ router.get("/search", async (req, res) => {
 router.get("/", async (req, res) => {
   try {
     const students = await Student.find().sort({ admissionDate: -1 });
-    res.json(students);
+    const payments = await Payment.find();
+    const paymentsMap = {};
+    payments.forEach((p) => {
+      const sId = p.student ? p.student.toString() : null;
+      if (sId) {
+        paymentsMap[sId] = (paymentsMap[sId] || 0) + (Number(p.amountPaid) || 0);
+      }
+    });
+
+    const sanitized = students.map((s) => {
+      const doc = s.toObject();
+      const paidFromPayments = paymentsMap[s._id.toString()] || 0;
+      const paidFromDoc = Number(s.paidAmount) || 0;
+      doc.paidAmount = Math.max(paidFromPayments, paidFromDoc);
+      doc.pendingAmount = Math.max(0, (Number(s.totalFee) || 0) - doc.paidAmount);
+      return doc;
+    });
+
+    res.json(sanitized);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -111,11 +166,6 @@ router.get("/", async (req, res) => {
 // Create Student
 router.post("/", upload.single("image"), async (req, res) => {
   try {
-    console.log("=== 1. POST Request Received ===");
-    console.log("Text Data (req.body):", req.body);
-    console.log("File Data (req.file):", req.file);
-
-    // Destructure all the new fields from req.body
     const {
       name,
       email,
@@ -135,26 +185,24 @@ router.post("/", upload.single("image"), async (req, res) => {
       imagePath = "uploads/" + req.file.filename;
     }
 
-    // Pass the newly destructured values to your model instance
     const newStudent = new Student({
       name,
       email,
       phone,
-      dob, // Mongoose will automatically cast this string representation into a Date
+      dob,
       parentName,
       emergencyContact,
       address,
       highestQualification,
       courses: parseCourses(courses),
       courseDuration,
-      totalFee: Number(totalFee), // Casting numeric values correctly
+      totalFee: Number(totalFee),
       imagePath,
     });
 
     await newStudent.save();
     res.status(201).json(newStudent);
   } catch (err) {
-    console.error("Error creating student:", err);
     res.status(500).json({ message: err.message });
   }
 });

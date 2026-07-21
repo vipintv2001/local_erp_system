@@ -79,8 +79,7 @@ studentSchema.pre("save", async function () {
 
       logEvent(`New student registered: ${this.name} (${this.studentId})`);
     } catch (error) {
-      console.error("❌ CRITICAL COUNTER ERROR:", error);
-      throw error; // 👈 Simply throw the error; Mongoose handles it gracefully
+      throw error;
     }
   } else if (this.isModified("status")) {
     logEvent(`Student status changed: ${this.studentId} is now ${this.status}`);

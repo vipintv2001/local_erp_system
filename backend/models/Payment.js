@@ -61,9 +61,7 @@ paymentSchema.post("save", async function (doc) {
       );
     }
   } catch (error) {
-    console.error("❌ ERROR IN PAYMENT POST-SAVE HOOK:", error);
-    // Note: Errors thrown inside post-save hooks do not automatically propagate back
-    // to Express nicely unless explicitly caught or handled. Logging it helps track it down.
+    // Error caught silently
   }
 });
 

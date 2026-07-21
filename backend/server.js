@@ -37,9 +37,6 @@ const PORT = process.env.PORT || 5000;
 mongoose
   .connect(process.env.MONGO_URI)
   .then(async () => {
-    console.log('Connected to local MongoDB');
-    
-    // Run status normalization and course migration for legacy students
     try {
       const Student = require('./models/Student');
       
@@ -56,7 +53,6 @@ mongoose
           }
           await student.save({ validateBeforeSave: false });
         }
-        console.log(`Successfully migrated ${students.length} legacy student statuses.`);
       }
 
       // 2. Course to courses array migration
@@ -67,25 +63,20 @@ mongoose
         ]
       });
       if (studentsToMigrate.length > 0) {
-        let migratedCount = 0;
         for (const student of studentsToMigrate) {
           const legacyCourse = student.get("course") || student._doc?.course;
           if (legacyCourse) {
             student.courses = [legacyCourse];
             await student.save({ validateBeforeSave: false });
-            migratedCount++;
           }
         }
-        console.log(`Successfully migrated ${migratedCount} legacy students to multiple courses schema.`);
       }
     } catch (migrateErr) {
-      console.error("Migration error:", migrateErr);
+      // Migration error caught
     }
 
-    app.listen(PORT, () => {
-      console.log(`Server running on http://127.0.0.1:${PORT}`);
-    });
+    app.listen(PORT);
   })
   .catch((err) => {
-    console.error('Database connection error:', err);
+    // Database connection error caught
   });
