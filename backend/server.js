@@ -39,9 +39,11 @@ mongoose
   .then(async () => {
     console.log('Connected to local MongoDB');
     
-    // Run status normalization migration for legacy students
+    // Run status normalization and course migration for legacy students
     try {
       const Student = require('./models/Student');
+      
+      // 1. Status normalization migration
       const students = await Student.find({
         status: { $in: ["Active", "Completed", "Dropped"] }
       });
@@ -55,6 +57,26 @@ mongoose
           await student.save({ validateBeforeSave: false });
         }
         console.log(`Successfully migrated ${students.length} legacy student statuses.`);
+      }
+
+      // 2. Course to courses array migration
+      const studentsToMigrate = await Student.find({
+        $or: [
+          { courses: { $exists: false } },
+          { courses: { $size: 0 } }
+        ]
+      });
+      if (studentsToMigrate.length > 0) {
+        let migratedCount = 0;
+        for (const student of studentsToMigrate) {
+          const legacyCourse = student.get("course") || student._doc?.course;
+          if (legacyCourse) {
+            student.courses = [legacyCourse];
+            await student.save({ validateBeforeSave: false });
+            migratedCount++;
+          }
+        }
+        console.log(`Successfully migrated ${migratedCount} legacy students to multiple courses schema.`);
       }
     } catch (migrateErr) {
       console.error("Migration error:", migrateErr);

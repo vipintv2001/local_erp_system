@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import api from '../utils/api';
-import { Users, UserCheck, CurrencyInr, ChartLineUp } from '@phosphor-icons/react';
+import { Users, UserCheck, CurrencyInr } from '@phosphor-icons/react';
 import { useNavigate } from 'react-router-dom';
 
 export default function Dashboard() {
@@ -8,7 +8,6 @@ export default function Dashboard() {
     totalStudents: 0,
     activeStudents: 0,
     feesPending: 0,
-    fullyPaid: 0,
   });
   const [showConfirm, setShowConfirm] = useState(false);
   const navigate = useNavigate();
@@ -36,7 +35,6 @@ export default function Dashboard() {
     { title: 'Total Students', value: metrics.totalStudents, icon: Users, color: 'bg-blue-500' },
     { title: 'Active Students', value: metrics.activeStudents, icon: UserCheck, color: 'bg-emerald-500' },
     { title: 'Fees Pending', value: metrics.feesPending, icon: CurrencyInr, color: 'bg-amber-500' },
-    { title: 'Fully Paid Students', value: metrics.fullyPaid, icon: ChartLineUp, color: 'bg-brand-500' },
   ];
 
   return (
@@ -51,7 +49,7 @@ export default function Dashboard() {
         </button>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {statCards.map((stat, idx) => (
           <div key={idx} className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm flex items-center gap-4">
             <div className={`${stat.color} w-12 h-12 rounded-lg flex items-center justify-center text-white shrink-0`}>

@@ -13,7 +13,7 @@ const studentSchema = new mongoose.Schema({
   emergencyContact: { type: String, required: true },
   address: { type: String, required: true },
   highestQualification: { type: String, required: true },
-  course: { type: String, required: true },
+  courses: [{ type: String, required: true }],
   courseDuration: { type: String, required: true }, // e.g., "6 Months", "1 Year"
   totalFee: { type: Number, required: true },
   paidAmount: { type: Number, default: 0 },

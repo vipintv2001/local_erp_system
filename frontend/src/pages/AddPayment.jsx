@@ -107,7 +107,7 @@ export default function AddPayment() {
                     <img src={`http://127.0.0.1:5000/${student.imagePath}`} className="w-8 h-8 rounded-full object-cover" alt="" />
                     <div>
                       <div className="text-sm font-medium text-slate-900">{student.name}</div>
-                      <div className="text-xs text-slate-500">{student.studentId} • {student.course}</div>
+                      <div className="text-xs text-slate-500">{student.studentId} • {student.courses && student.courses.length > 0 ? student.courses.join(', ') : student.course}</div>
                     </div>
                   </div>
                 ))}
@@ -122,7 +122,7 @@ export default function AddPayment() {
                 <h4 className="text-sm font-bold text-emerald-900">Student Selected</h4>
                 <p className="text-sm text-emerald-700 mt-1">
                   Name: {selectedStudent.name} <br/>
-                  Course: {selectedStudent.course} <br/>
+                  Course: {selectedStudent.courses && selectedStudent.courses.length > 0 ? selectedStudent.courses.join(', ') : selectedStudent.course} <br/>
                   Pending Dues: ₹{selectedStudent.pendingAmount}
                 </p>
               </div>

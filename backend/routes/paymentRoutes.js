@@ -30,7 +30,7 @@ router.post('/', async (req, res) => {
     
     await newPayment.save();
     
-    const populatedPayment = await Payment.findById(newPayment._id).populate('student', 'name course studentId');
+    const populatedPayment = await Payment.findById(newPayment._id).populate('student', 'name courses studentId');
     res.status(201).json(populatedPayment);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -40,7 +40,7 @@ router.post('/', async (req, res) => {
 // Get all payments (History)
 router.get('/', async (req, res) => {
   try {
-    const payments = await Payment.find().populate('student', 'name course studentId').sort({ datePaid: -1 });
+    const payments = await Payment.find().populate('student', 'name courses studentId').sort({ datePaid: -1 });
     res.json(payments);
   } catch (err) {
     res.status(500).json({ message: err.message });

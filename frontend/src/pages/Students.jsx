@@ -23,7 +23,7 @@ export default function Students() {
     emergencyContact: "",
     address: "",
     highestQualification: "",
-    course: "",
+    courses: [],
     courseDuration: "",
     totalFee: "",
     image: null,
@@ -38,7 +38,7 @@ export default function Students() {
     emergencyContact: "",
     address: "",
     highestQualification: "",
-    course: "",
+    courses: [],
     courseDuration: "",
     totalFee: "",
     status: "Active",
@@ -70,31 +70,62 @@ export default function Students() {
     }
   };
 
-  const handleCourseChange = (courseName, isEdit = false) => {
-    const selectedCourse = coursesList.find((c) => c.courseName === courseName);
-    if (isEdit) {
-      setEditFormData((prev) => ({
+  const handleAddCourse = (courseName, isEdit = false) => {
+    if (!courseName) return;
+    const setForm = isEdit ? setEditFormData : setFormData;
+    setForm((prev) => {
+      const currentCourses = prev.courses || [];
+      if (currentCourses.includes(courseName)) return prev;
+      const newCourses = [...currentCourses, courseName];
+      
+      const durations = newCourses.map(name => {
+        const course = coursesList.find(c => c.courseName === name);
+        return course ? course.duration : "";
+      }).filter(Boolean);
+      const combinedDuration = durations.join(", ");
+      
+      return {
         ...prev,
-        course: courseName,
-        courseDuration: selectedCourse ? selectedCourse.duration : prev.courseDuration,
-      }));
-    } else {
-      setFormData((prev) => ({
+        courses: newCourses,
+        courseDuration: combinedDuration || prev.courseDuration
+      };
+    });
+  };
+
+  const handleRemoveCourse = (courseName, isEdit = false) => {
+    const setForm = isEdit ? setEditFormData : setFormData;
+    setForm((prev) => {
+      const currentCourses = prev.courses || [];
+      const newCourses = currentCourses.filter(c => c !== courseName);
+      
+      const durations = newCourses.map(name => {
+        const course = coursesList.find(c => c.courseName === name);
+        return course ? course.duration : "";
+      }).filter(Boolean);
+      const combinedDuration = durations.join(", ");
+      
+      return {
         ...prev,
-        course: courseName,
-        courseDuration: selectedCourse ? selectedCourse.duration : prev.courseDuration,
-      }));
-    }
+        courses: newCourses,
+        courseDuration: combinedDuration
+      };
+    });
   };
 
   const handleAddSubmit = async (e) => {
     e.preventDefault();
+    if (!formData.courses || formData.courses.length === 0) {
+      alert("Please select at least one course.");
+      return;
+    }
     const data = new FormData();
 
     // Appending all existing and new fields to FormData
     Object.keys(formData).forEach((key) => {
       if (key === "image") {
         if (formData.image) data.append("image", formData.image);
+      } else if (key === "courses") {
+        data.append("courses", JSON.stringify(formData.courses));
       } else {
         data.append(key, formData[key]);
       }
@@ -113,7 +144,7 @@ export default function Students() {
         emergencyContact: "",
         address: "",
         highestQualification: "",
-        course: "",
+        courses: [],
         courseDuration: "",
         totalFee: "",
         image: null,
@@ -136,7 +167,7 @@ export default function Students() {
       emergencyContact: student.emergencyContact || "",
       address: student.address || "",
       highestQualification: student.highestQualification || "",
-      course: student.course || "",
+      courses: student.courses || (student.course ? [student.course] : []),
       courseDuration: student.courseDuration || "",
       totalFee: student.totalFee || "",
       status: (student.status && student.status.startsWith("Active")) ? "Active" : (student.status || "Active"),
@@ -147,11 +178,17 @@ export default function Students() {
 
   const handleEditSubmit = async (e) => {
     e.preventDefault();
+    if (!editFormData.courses || editFormData.courses.length === 0) {
+      alert("Please select at least one course.");
+      return;
+    }
     const data = new FormData();
 
     Object.keys(editFormData).forEach((key) => {
       if (key === "image") {
         if (editFormData.image) data.append("image", editFormData.image);
+      } else if (key === "courses") {
+        data.append("courses", JSON.stringify(editFormData.courses));
       } else {
         data.append(key, editFormData[key]);
       }
@@ -320,7 +357,7 @@ export default function Students() {
                     {student.studentId}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-600">
-                    {student.course}
+                    {student.courses && student.courses.length > 0 ? student.courses.join(', ') : (student.course || '')}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-600">
                     {student.phone}
@@ -332,22 +369,23 @@ export default function Students() {
                     <div className="flex items-center justify-end gap-2">
                       <button
                         onClick={() => navigate(`/students/${student._id}`)}
-                        title="View Profile"
-                        className="text-brand-600 hover:text-brand-900 p-1.5 hover:bg-brand-50 rounded"
+                        title="View Full Details"
+                        className="text-brand-600 hover:text-brand-900 p-1.5 hover:bg-brand-50 rounded flex items-center gap-1 cursor-pointer"
                       >
                         <Eye size={20} />
+                        <span className="hidden xl:inline text-xs font-semibold">View Details</span>
                       </button>
                       <button
                         onClick={() => handleOpenEditModal(student)}
                         title="Edit Student"
-                        className="text-amber-600 hover:text-amber-900 p-1.5 hover:bg-amber-50 rounded"
+                        className="text-amber-600 hover:text-amber-900 p-1.5 hover:bg-amber-50 rounded cursor-pointer"
                       >
                         <Pencil size={20} />
                       </button>
                       <button
                         onClick={() => handleDelete(student._id)}
                         title="Delete Student"
-                        className="text-red-600 hover:text-red-900 p-1.5 hover:bg-red-50 rounded"
+                        className="text-red-600 hover:text-red-900 p-1.5 hover:bg-red-50 rounded cursor-pointer"
                       >
                         <Trash size={20} />
                       </button>
@@ -526,20 +564,40 @@ export default function Students() {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-slate-700 mb-1">
-                    Course
+                    Enrolled Courses
                   </label>
+                  {formData.courses && formData.courses.length > 0 && (
+                    <div className="flex flex-wrap gap-2 mb-2 p-2 border border-dashed border-slate-200 rounded-lg bg-slate-50">
+                      {formData.courses.map((courseName) => (
+                        <span key={courseName} className="inline-flex items-center gap-1 bg-brand-50 text-brand-700 px-2.5 py-1 rounded-full text-xs font-semibold border border-brand-200">
+                          {courseName}
+                          <button
+                            type="button"
+                            onClick={() => handleRemoveCourse(courseName, false)}
+                            className="hover:text-brand-900 focus:outline-none font-bold text-[10px] ml-1"
+                          >
+                            ✕
+                          </button>
+                        </span>
+                      ))}
+                    </div>
+                  )}
                   <select
-                    required
-                    value={formData.course}
-                    onChange={(e) => handleCourseChange(e.target.value, false)}
+                    value=""
+                    onChange={(e) => {
+                      handleAddCourse(e.target.value, false);
+                      e.target.value = "";
+                    }}
                     className="w-full border-slate-300 rounded-lg p-2.5 border focus:ring-brand-500 focus:border-brand-500 bg-white text-slate-800 outline-none"
                   >
-                    <option value="">Select Course</option>
-                    {coursesList.map((c) => (
-                      <option key={c._id} value={c.courseName}>
-                        {c.courseName}
-                      </option>
-                    ))}
+                    <option value="">Choose Course to Add...</option>
+                    {coursesList
+                      .filter((c) => !formData.courses?.includes(c.courseName))
+                      .map((c) => (
+                        <option key={c._id} value={c.courseName}>
+                          {c.courseName}
+                        </option>
+                      ))}
                   </select>
                 </div>
               </div>
@@ -775,20 +833,40 @@ export default function Students() {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-slate-700 mb-1">
-                    Course
+                    Enrolled Courses
                   </label>
+                  {editFormData.courses && editFormData.courses.length > 0 && (
+                    <div className="flex flex-wrap gap-2 mb-2 p-2 border border-dashed border-slate-200 rounded-lg bg-slate-50">
+                      {editFormData.courses.map((courseName) => (
+                        <span key={courseName} className="inline-flex items-center gap-1 bg-brand-50 text-brand-700 px-2.5 py-1 rounded-full text-xs font-semibold border border-brand-200">
+                          {courseName}
+                          <button
+                            type="button"
+                            onClick={() => handleRemoveCourse(courseName, true)}
+                            className="hover:text-brand-900 focus:outline-none font-bold text-[10px] ml-1"
+                          >
+                            ✕
+                          </button>
+                        </span>
+                      ))}
+                    </div>
+                  )}
                   <select
-                    required
-                    value={editFormData.course}
-                    onChange={(e) => handleCourseChange(e.target.value, true)}
+                    value=""
+                    onChange={(e) => {
+                      handleAddCourse(e.target.value, true);
+                      e.target.value = "";
+                    }}
                     className="w-full border-slate-300 rounded-lg p-2.5 border focus:ring-brand-500 focus:border-brand-500 bg-white text-slate-800 outline-none"
                   >
-                    <option value="">Select Course</option>
-                    {coursesList.map((c) => (
-                      <option key={c._id} value={c.courseName}>
-                        {c.courseName}
-                      </option>
-                    ))}
+                    <option value="">Choose Course to Add...</option>
+                    {coursesList
+                      .filter((c) => !editFormData.courses?.includes(c.courseName))
+                      .map((c) => (
+                        <option key={c._id} value={c.courseName}>
+                          {c.courseName}
+                        </option>
+                      ))}
                   </select>
                 </div>
               </div>
@@ -869,13 +947,13 @@ export default function Students() {
                     setShowEditModal(false);
                     setEditingStudent(null);
                   }}
-                  className="px-4 py-2 text-slate-600 font-medium hover:bg-slate-100 rounded-lg"
+                  className="px-4 py-2 text-slate-600 font-medium hover:bg-slate-100 rounded-lg cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-6 py-2 bg-brand-600 hover:bg-brand-700 text-white font-medium rounded-lg shadow-sm"
+                  className="px-6 py-2 bg-brand-600 hover:bg-brand-700 text-white font-medium rounded-lg shadow-sm cursor-pointer"
                 >
                   Save Changes
                 </button>

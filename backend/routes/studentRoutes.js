@@ -4,6 +4,23 @@ const Student = require("../models/Student");
 const Payment = require("../models/Payment");
 const upload = require("../middlewares/upload");
 
+const parseCourses = (courses) => {
+  if (!courses) return [];
+  if (Array.isArray(courses)) return courses;
+  if (typeof courses === "string") {
+    const trimmed = courses.trim();
+    if (trimmed.startsWith("[") && trimmed.endsWith("]")) {
+      try {
+        return JSON.parse(trimmed);
+      } catch (e) {
+        // Fallback to split
+      }
+    }
+    return trimmed.split(",").map(c => c.trim()).filter(Boolean);
+  }
+  return [];
+};
+
 // ==========================================
 // 1. STATIC & SPECIFIC GET ROUTES FIRST
 // ==========================================
@@ -68,7 +85,7 @@ router.get("/search", async (req, res) => {
 
     const regex = new RegExp(q, "i");
     const students = await Student.find({
-      $or: [{ name: regex }, { studentId: regex }],
+      $or: [{ name: regex }, { studentId: regex }, { courses: regex }],
     }).limit(10);
 
     res.json(students);
@@ -108,7 +125,7 @@ router.post("/", upload.single("image"), async (req, res) => {
       emergencyContact,
       address,
       highestQualification,
-      course,
+      courses,
       courseDuration,
       totalFee,
     } = req.body;
@@ -128,7 +145,7 @@ router.post("/", upload.single("image"), async (req, res) => {
       emergencyContact,
       address,
       highestQualification,
-      course,
+      courses: parseCourses(courses),
       courseDuration,
       totalFee: Number(totalFee), // Casting numeric values correctly
       imagePath,
@@ -179,6 +196,9 @@ router.put("/:id", upload.single("image"), async (req, res) => {
     if (updateData.totalFee) {
       updateData.totalFee = Number(updateData.totalFee);
     }
+    if (updateData.courses !== undefined) {
+      updateData.courses = parseCourses(updateData.courses);
+    }
 
     const student = await Student.findById(req.params.id);
     if (!student) return res.status(404).json({ message: "Student not found" });
@@ -190,6 +210,7 @@ router.put("/:id", upload.single("image"), async (req, res) => {
       }
     }
 
+    // Explicitly delete courses if it is set in updateData, to let Object.assign assign the parsed array
     Object.assign(student, updateData);
 
     if (updateData.totalFee !== undefined) {

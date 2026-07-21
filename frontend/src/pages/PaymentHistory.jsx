@@ -298,11 +298,11 @@ export default function PaymentHistory() {
               </div>
 
               <div className="flex items-baseline justify-between border-b border-dashed border-slate-300 pb-1">
-                <span className="text-slate-600 font-medium">
-                  Course Enrolled
-                </span>
+                <span className="text-slate-600 font-medium">Course</span>
                 <span className="font-semibold text-right">
-                  {receiptToPrint.student?.course}
+                  {receiptToPrint.student?.courses && receiptToPrint.student.courses.length > 0
+                    ? receiptToPrint.student.courses.join(', ')
+                    : (receiptToPrint.student?.course || '')}
                 </span>
               </div>
 
@@ -361,7 +361,7 @@ export default function PaymentHistory() {
                   />
                 </svg> */}
                 <img
-                  src="/bggg.png"
+                  src="/bgggc.png"
                   alt=""
                   className="h-full w-full object-contain grayscale object-left"
                 />
